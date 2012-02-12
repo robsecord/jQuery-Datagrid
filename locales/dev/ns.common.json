@@ -1,0 +1,53 @@
+{
+    "error" : {
+        "type" : {
+          "dev"     : "jQuery.datagrid Developer Error",
+          "user"    : "jQuery.datagrid User Error"
+        },
+
+        "invalid-ds-json"   : "$t(error.type.dev): initialize() -> Invalid Column Model supplied for Datagrid with Data Source Type = JSON.",
+        "invalid-ds"        : "$t(error.type.dev): initialize() -> Invalid Data Source supplied for Datagrid."
+    },
+
+    "loading" : {
+        "title"     : "Please wait,",
+        "datagrid"  : "Loading Datagrid..."
+    },
+
+    "column" : {
+        "sort"   : "Sort",
+        "resize" : "Resize",
+        "move"   : "Reorder",
+        "menu"   : "More",
+        "items"  : {
+            "sort-asc"   : "Sort Ascending",
+            "sort-desc"  : "Sort Descending",
+            "sort-clear" : "Clear Sort",
+            "freeze"     : "Freeze Column",
+            "unfreeze"   : "Unfreeze Column"
+        }
+    },
+
+    "lazyloader" : {
+        "north" : {
+            "message" : {
+                "title"     : "Loading more results..",
+                "body"      : "<a href=\"javascript:void(0)\" class=\"cancel-lazy-loader\" rel=\"north\">cancel</a>",
+                "none" : {
+                    "title" : "No more results.",
+                    "body"  : "<a href=\"javascript:void(0)\" class=\"refresh-lazy-loader\" rel=\"north\">refresh</a>"
+                }
+            }
+        },
+        "south" : {
+            "message" : {
+                "title"     : "Loading more results..",
+                "body"      : "<a href=\"javascript:void(0)\" class=\"cancel-lazy-loader\" rel=\"south\">cancel</a>",
+                "none" : {
+                    "title" : "No more results.",
+                    "body"  : "<a href=\"javascript:void(0)\" class=\"refresh-lazy-loader\" rel=\"south\">refresh</a>"
+                }
+            }
+        }
+    }
+}
