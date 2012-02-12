@@ -5,6 +5,7 @@
  * Created on   : Jan 13, 2012
  * Author       : Rob Secord
  * Credits      :
+ * Version      : 0.1
  * Description  :
  *   -
  * Dependancies :
@@ -75,10 +76,10 @@
             spacerRow           : false,
             spacerRowHeight     : 20,
 
-            // Hover Effects on Rows & Cells
+            // Hover Effects on Rows, Columns & Cells
             hover               : {'rows': false, 'cols': false, 'cells': false, 'class': {'prefix': 'hover-'}},
 
-            // Alternate Rows
+            // Alternate Rows/Columns
             alternate           : {'rows': false, 'cols': false, 'class': {'prefix': 'alt-'}},
 
             // Header Column Resizing/Moving/Hiding
@@ -214,6 +215,9 @@
             this.containerData.size.inner.width = this.$container.width();
             this.containerData.size.inner.height = this.$container.height();
             this.containerData.position = this.$container.position();
+
+            // Ensure Column Menus are needed
+            this.options.columnMenus = (this.options.columnMenus && (this.options.sortable || this.options.freezable));
 
             // Enable Loading Overlay
             if (this.options.useLoadingOverlay) {
@@ -501,6 +505,9 @@
                     this.headerData.moveBounds.end = this.headerData.width.scrollPane - (this.columnModel[i].width + this.headerData.cell.extraWidth);
                 }
             }
+            if (this.headerData.moveBounds.end == 0) {
+                this.headerData.moveBounds.end = this.headerData.width.scrollPane;
+            }
 
             // Measure start of body table
             this.bodyData.start = (this.options.lazyLoadNorth) ? this.$lazyLoaderNorthRow.outerHeight(true) : 0;
@@ -686,7 +693,7 @@
             }
 
             // Check for Column Menus
-            if (this.options.columnMenus) {
+            if (this.options.columnMenus && ((this.options.sortable && this.columnModel[cellIdx].sortable) || (this.options.freezable && this.columnModel[cellIdx].freezable))) {
                 this.makeColumnMenuArrows($cell, cellIdx);
             }
 
@@ -1381,38 +1388,44 @@
             this.columnMenuData.caret.position.top = caret.cssNumber('top');
             this.columnMenuData.caret.position.right = caret.cssNumber('right');
 
-            var sortAsc = $('<a/>')
-                .addClass('datagrid-menu-item')
-                .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.sort-asc')})
-                .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.sort-asc') + '</span>');
-            list.append($('<li/>').attr('data-menu-item', 'sort-asc').addClass('sort-asc').append(sortAsc));
+            if (this.options.sortable) {
+                var sortAsc = $('<a/>')
+                    .addClass('datagrid-menu-item')
+                    .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.sort-asc')})
+                    .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.sort-asc') + '</span>');
+                list.append($('<li/>').attr('data-menu-item', 'sort-asc').addClass('sort-asc').append(sortAsc));
 
-            var sortDesc = $('<a/>')
-                .addClass('datagrid-menu-item')
-                .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.sort-desc')})
-                .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.sort-desc') + '</span>');
-            list.append($('<li/>').attr('data-menu-item', 'sort-desc').addClass('sort-desc').append(sortDesc));
+                var sortDesc = $('<a/>')
+                    .addClass('datagrid-menu-item')
+                    .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.sort-desc')})
+                    .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.sort-desc') + '</span>');
+                list.append($('<li/>').attr('data-menu-item', 'sort-desc').addClass('sort-desc').append(sortDesc));
 
-            var sortClear = $('<a/>')
-                .addClass('datagrid-menu-item')
-                .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.sort-clear')})
-                .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.sort-clear') + '</span>');
-            list.append($('<li/>').attr('data-menu-item', 'sort-clear').addClass('sort-clear').append(sortClear));
+                var sortClear = $('<a/>')
+                    .addClass('datagrid-menu-item')
+                    .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.sort-clear')})
+                    .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.sort-clear') + '</span>');
+                list.append($('<li/>').attr('data-menu-item', 'sort-clear').addClass('sort-clear').append(sortClear));
+            }
 
             // Seperator
-            list.append($('<li/>').addClass('menu-seperator').append($('<span/>')));
+            if (this.options.sortable && this.options.freezable) {
+                list.append($('<li/>').addClass('menu-seperator').append($('<span/>')));
+            }
 
-            var freezeCol = $('<a/>')
-                .addClass('datagrid-menu-item')
-                .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.freeze')})
-                .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.freeze') + '</span>');
-            list.append($('<li/>').attr('data-menu-item', 'freeze').addClass('freeze').append(freezeCol));
+            if (this.options.freezable) {
+                var freezeCol = $('<a/>')
+                    .addClass('datagrid-menu-item')
+                    .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.freeze')})
+                    .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.freeze') + '</span>');
+                list.append($('<li/>').attr('data-menu-item', 'freeze').addClass('freeze').append(freezeCol));
 
-            var unfreezeCol = $('<a/>')
-                .addClass('datagrid-menu-item')
-                .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.unfreeze')})
-                .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.unfreeze') + '</span>');
-            list.append($('<li/>').attr('data-menu-item', 'unfreeze').addClass('unfreeze').append(unfreezeCol));
+                var unfreezeCol = $('<a/>')
+                    .addClass('datagrid-menu-item')
+                    .attr({'href': 'javascript:void(0)', 'title': _t('column.menu.items.unfreeze')})
+                    .html('<span class="menu-item-icon"></span><span class="menu-item-display">' + _t('column.menu.items.unfreeze') + '</span>');
+                list.append($('<li/>').attr('data-menu-item', 'unfreeze').addClass('unfreeze').append(unfreezeCol));
+            }
 
             // Store Size of Menu
             this.columnMenuData.size.width = this.$columnMenu.outerWidth(true);
@@ -1765,22 +1778,44 @@
             // Clear Sort State
             this.$columnMenu.find('.menu-checked').removeClass('menu-checked');
 
+            // Hide All Elements
+            this.$columnMenu.find('[data-menu-item=sort-asc]').css({'display':'none'});
+            this.$columnMenu.find('[data-menu-item=sort-desc]').css({'display':'none'});
+            this.$columnMenu.find('[data-menu-item=sort-clear]').css({'display':'none'});
+            this.$columnMenu.find('[data-menu-item=freeze]').css({'display':'none'});
+            this.$columnMenu.find('[data-menu-item=unfreeze]').css({'display':'none'});
+            this.$columnMenu.find('.menu-seperator').css({'display':'none'});
+
             // Check Sort State
-            if (this.currentSort.column == cellIdx) {
-                if (/ascending/i.test(this.currentSort.direction)) {
-                    this.$columnMenu.find('[data-menu-item=sort-asc]').addClass('menu-checked');
-                } else {
-                    this.$columnMenu.find('[data-menu-item=sort-desc]').addClass('menu-checked');
+            if (this.options.sortable && this.columnModel[cellIdx].sortable) {
+                // Display Sorting Items
+                this.$columnMenu.find('[data-menu-item=sort-asc]').css({'display':'block'});
+                this.$columnMenu.find('[data-menu-item=sort-desc]').css({'display':'block'});
+                this.$columnMenu.find('[data-menu-item=sort-clear]').css({'display':'block'});
+
+                // Apply Checkmark if Sorted
+                if (this.currentSort.column == cellIdx) {
+                    if (/ascending/i.test(this.currentSort.direction)) {
+                        this.$columnMenu.find('[data-menu-item=sort-asc]').addClass('menu-checked');
+                    } else {
+                        this.$columnMenu.find('[data-menu-item=sort-desc]').addClass('menu-checked');
+                    }
                 }
             }
 
             // Check Freeze Column State
-            if ($cell.hasClass('loose')) {
-                this.$columnMenu.find('[data-menu-item=freeze]').css({'display':'block'});
-                this.$columnMenu.find('[data-menu-item=unfreeze]').css({'display':'none'});
-            } else {
-                this.$columnMenu.find('[data-menu-item=freeze]').css({'display':'none'});
-                this.$columnMenu.find('[data-menu-item=unfreeze]').css({'display':'block'});
+            if (this.options.freezable && this.columnModel[cellIdx].freezable) {
+                // Display Freeze Items
+                if ($cell.hasClass('loose')) {
+                    this.$columnMenu.find('[data-menu-item=freeze]').css({'display':'block'});
+                } else {
+                    this.$columnMenu.find('[data-menu-item=unfreeze]').css({'display':'block'});
+                }
+            }
+
+            // Display Separator
+            if (this.options.sortable && this.columnModel[cellIdx].sortable && this.options.freezable && this.columnModel[cellIdx].freezable) {
+                this.$columnMenu.find('.menu-seperator').css({'display':'block'});
             }
         },
 

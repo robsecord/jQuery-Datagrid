@@ -113,34 +113,34 @@
             columnModel    : columnModel,
 
             // Sorting
-            sortable            : false,
+            sortable            : true,
             sortServer          : false,
 
             // Column Freezing
-            freezable           : false,
+            freezable           : true,
             freezeScroll        : true,
 
             // Lazy Loading
-            lazyLoadNorth       : false,
-            lazyLoadSouth       : false,
+            lazyLoadNorth       : true,
+            lazyLoadSouth       : true,
 
             // Last Column Spacer
-            spacerCol           : false,
+            spacerCol           : true,
             spacerColWidth      : 50,
 
             // Last Row Spacer
             spacerRow           : false,
             spacerRowHeight     : 20,
 
-            // Hover Effects on Rows & Cells
+            // Hover Effects on Rows, Columns & Cells
             hover               : {'rows': true, 'cols': false, 'cells': false, 'class': {'prefix': 'hover-'}},
 
             // Alternate Rows/Columns
             alternate           : {'rows': true, 'cols': true, 'class': {'prefix': 'alt-'}},
 
             // Header Column Resizing/Moving/Hiding
-            columnResize        : false,
-            columnMove          : false,
+            columnResize        : true,
+            columnMove          : true,
             //columnHideFirst     : false,  // Allow hiding of First Column
 
             // Header Column Menus
