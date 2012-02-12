@@ -20,6 +20,12 @@
  *   - server-side sorting
  *   - limit column-freezing to view
  *   - lazy-loading
+ *   -
+ *   -
+ *   - Bugs:
+ *       -
+ *       -
+ *       -
 */
 /**
  * @internal jQuery Dollar-Safe Mode
@@ -129,6 +135,11 @@
 
         // Get container element
         this.$container = $(element);
+
+        // Container needs relative or absolute/fixed positioning
+        if (/static/i.test(this.$container.css('position'))) {
+            this.$container.css('position', 'relative');
+        }
 
         // Container Data
         this.containerData = {
@@ -1345,6 +1356,9 @@
 
                 // Scroll
                 _self.scrollTop(offsetY);
+
+                // Allow scrolling of page if reach start/end of datagrid
+                return (offsetY == _self.vertScrollbarData.start || offsetY == _self.vertScrollbarData.stop);
             });
         },
 
@@ -1719,24 +1733,34 @@
          * @return undefined
          */
         showColumnMenu: function(e, $cell) {
-            e.preventDefault();
-            e.stopPropagation();
+            //e.preventDefault();
+            //e.stopPropagation();
 
             // Hide any Open Column Menus
             this.hideColumnMenu({'force':false});
 
             // Position Column menu
             var contOffset = this.$container.offset(),
-                cellOffset = $cell.offset(),
+                cellOffset = $cell.position(),
                 cellIdx = $cell.attrNumber('data-cellindex'),
                 caret = this.$columnMenu.find('.datagrid-menu-caret');
 
             // Track Active Cell
             this.columnMenuData.activeCell = $cell;
 
+            if (this.$container.css('position') == 'absolute') {
+                cellOffset = $cell.offset();
+            }
+
             // Position Menu under Header Cell
-            this.columnMenuData.position.top = cellOffset.top - contOffset.top + $cell.outerHeight() + this.options.columnMenuOffset.y;
-            this.columnMenuData.position.left = cellOffset.left - contOffset.left + $cell.outerWidth() - this.$columnMenu.outerWidth() + this.options.columnMenuOffset.x;
+            this.columnMenuData.position.top = cellOffset.top + $cell.outerHeight() + this.options.columnMenuOffset.y;
+            this.columnMenuData.position.left = cellOffset.left + $cell.outerWidth() - this.$columnMenu.outerWidth() + this.options.columnMenuOffset.x;
+
+            // Correct position for absolutely positioned container
+            if (this.$container.css('position') == 'absolute') {
+                this.columnMenuData.position.top -= contOffset.top;
+                this.columnMenuData.position.left -= contOffset.left;
+            }
 
             // Constrain Position within Container
             var leftDiff = Math.min(this.columnMenuData.position.left, 0);
@@ -1831,6 +1855,14 @@
 
             if (options && !options.force) {
                 if (this.columnMenuData.state.root.hover || this.columnMenuData.state.sub.hover) {return;}
+            }
+
+            // Clear any Hide Timers on Column Menu
+            if (this.menuHideTimers.root > -1) {
+                window.clearTimeout(this.menuHideTimers.root);
+            }
+            if (this.menuHideTimers.sub > -1) {
+                window.clearTimeout(this.menuHideTimers.sub);
             }
 
             // Remove Active State from Cell Arrow
