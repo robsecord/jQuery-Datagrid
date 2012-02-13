@@ -1,5 +1,7 @@
 Enhanced Datagrid Control using jQuery 1.6.4
- - by : Robert J. Secord, B.Sc.
+ - by  : Robert J. Secord, B.Sc.
+ - web : http://lab.robsecord.com/jquery/datagrid/
+ - git : https://github.com/robsecord/jQuery-Datagrid
 
 Features:
  - Ajax or JSON Data Source
