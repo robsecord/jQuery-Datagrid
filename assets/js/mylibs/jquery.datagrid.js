@@ -23,7 +23,7 @@
  *   -
  *   -
  *   - Bugs:
- *       -
+ *       - horizontal scrolling, column reordering and column freezing messes up column menu position
  *       -
 */
 /**
