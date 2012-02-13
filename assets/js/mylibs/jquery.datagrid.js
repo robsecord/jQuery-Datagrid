@@ -25,7 +25,6 @@
  *   - Bugs:
  *       -
  *       -
- *       -
 */
 /**
  * @internal jQuery Dollar-Safe Mode
@@ -1288,10 +1287,8 @@
                     // Get drag offset of scrollbar
                     var pct, scrollY, offsetY = dd.offsetY;
 
-                    // Correct offset for absolutely positioned elements
-                    if (_self.$container.css('position') == 'absolute') {
-                        offsetY -= _self.$container.offset().top;
-                    }
+                    // Adjust offset to container position
+                    offsetY -= _self.$container.offset().top;
 
                     // Constrain offset to bounds
                     offsetY = constrain(offsetY, _self.vertScrollbarData.start, _self.vertScrollbarData.stop);
@@ -1305,10 +1302,8 @@
                     // Get drag offset of scrollbar
                     var pct, scrollX, offsetX = dd.offsetX;
 
-                    // Correct offset for absolutely positioned elements
-                    if (_self.$container.css('position') == 'absolute') {
-                        offsetX -= _self.$container.offset().left;
-                    }
+                    // Adjust offset to container position
+                    offsetX -= _self.$container.offset().left;
 
                     // Constrain offset to bounds
                     offsetX = constrain(offsetX, _self.horzScrollbarData.start, _self.horzScrollbarData.stop);
@@ -1748,6 +1743,7 @@
             // Track Active Cell
             this.columnMenuData.activeCell = $cell;
 
+            // Fix Cell offset for absolutely positioned container
             if (this.$container.css('position') == 'absolute') {
                 cellOffset = $cell.offset();
             }
