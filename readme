@@ -1,0 +1,24 @@
+Enhanced Datagrid Control using jQuery 1.6.4
+ - by : Robert J. Secord, B.Sc.
+
+Features:
+ - Ajax or JSON Data Source
+ - 3 Data Source Types: Number, String, Date
+ - Full Customization via CSS Themes
+ - i18n Support
+ - Column Sorting (Client-Side)
+ - Column Freezing
+ - Column Reordering
+ - Column Resizing
+ - Configurable Column Model
+ - Configurable Date Formatting
+ - Alternating Rows/Columns
+ - Hover Rows/Columns/Cells
+ - Spacer Column/Row
+
+Features to come:
+ - 4th Data Source Type: Currency
+ - Column Sorting (Server-Side)
+ - Lazy Loading (North & South)
+ - Column Hiding/Revealing
+ - Column Model Persistence via Cookies
