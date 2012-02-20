@@ -50,7 +50,7 @@
             'hideable'  : true,
             'hidden'    : false,
             'sortable'  : true,
-            'sorted'    : false,//'ascending',
+            'sorted'    : false,
             'freezable' : true,
             'frozen'    : false,
             'resizable' : true,
@@ -64,7 +64,7 @@
             'hideable'  : true,
             'hidden'    : false,
             'sortable'  : true,
-            'sorted'    : 'ascending',
+            'sorted'    : 1, // false or 0 = Not sorted, 1 = Ascending, 2 = Descending
             'freezable' : true,
             'frozen'    : false,
             'resizable' : true,
@@ -90,21 +90,22 @@
         // Create DataGrid Data Source
         var s = new Date(1980,0,1).getTime(),
             e = new Date(2010,0,1).getTime(),
-            val, row = [], dataSource = [], nestedData = [], nestedRow = [];
+            i, j, val, row = {'index': 0, 'cells': []}, dataSource = [];
 
-        for (var k, j, i = 0; i < 51; i++) {
-            row = []; row.length = 0;
+        for (i = 0; i < 50; i++) {
+            row = {'index': i, 'cells': []};
             for (j = 0; j < columnModel.length; j++) {
                 if (j == 0) { val = i; }//Math.floor(Math.random()*101); }
                 else if (j == 1) { val = new Date(s+Math.random()*(e-s)); }
                 else { val = 'Cell ' + (i+1) + '-' + (j+1) + ''; }
-                row.push({'data': val});
+                row.cells.push({'data': val, 'edit': ''});
             }
             dataSource.push(row);
         }
 
         // Create Custom DataGrid Control
-        $('#datagrid-container').datagrid({
+        var $datagridEl = $('#datagrid-container');
+        $datagridEl.datagrid({
             // Data Source
             dataSource     : dataSource,
             dataSourceType : 'json',
@@ -121,8 +122,7 @@
             freezeScroll        : true,
 
             // Lazy Loading
-            lazyLoadNorth       : true,
-            lazyLoadSouth       : true,
+            lazyLoad            : {'north': 20, 'south': 20},
 
             // Last Column Spacer
             spacerCol           : true,
@@ -160,6 +160,15 @@
             // i18n Support Function
             //i18n                : $.t
         });
+
+        /*$datagridEl
+            .bind('datagridScrollTop', function(e, scrollY, offsetY) {
+                console.log('external event hook: datagridScrollTop', scrollY, offsetY);
+            })
+            .bind('datagridScrollLeft', function(e, scrollX, offsetX) {
+                console.log('external event hook: datagridScrollLeft', scrollX, offsetX);
+            });
+        */
     }
 
 
